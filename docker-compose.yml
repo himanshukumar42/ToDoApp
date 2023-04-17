@@ -1,0 +1,33 @@
+version: "2"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/SalesBag
+    links:
+      - db:postgres
+    container_name: app_web_1
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    environment:
+      QUART_APP: manage.py
+      QUART_ENV: development
+      SECRET_KEY: "my_secret_key"
+      DB_USERNAME: postgres
+      DB_PASSWORD: himanshu
+      DB_HOST: localhost
+      DATABASE_NAME: tododb
+  db:
+    image: postgres:13-alpine
+    restart: always
+    container_name: app_db_1
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: app
